@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from . import db, BaseMixin, BaseNameMixin, BaseScopedNameMixin, BaseScopedIdNameMixin
+from . import db, BaseMixin, BaseNameMixin, BaseScopedNameMixin
 
 __all__ = ['InventoryType', 'InventoryVariantAttribute', 'InventoryItem',
     'InventoryItemVariant', 'InventoryItemVariantAttribute']
@@ -26,7 +26,7 @@ class InventoryVariantAttribute(BaseScopedNameMixin, db.Model):
     __table_args__ = (db.UniqueConstraint('name', 'inventory_type_id'),)
 
 
-class InventoryItem(BaseScopedIdNameMixin, db.Model):
+class InventoryItem(BaseScopedNameMixin, db.Model):
     """
     Describes an item for sale.
     """
@@ -60,10 +60,11 @@ class InventoryItemVariantAttribute(BaseMixin, db.Model):
     __tablename__ = 'inventory_item_variant_attribute'
 
     attribute_id = db.Column(None, db.ForeignKey('inventory_variant_attribute.id'), nullable=False)
-    attribute = db.relationship(InventoryVariantAttribute, backref=db.backref('variantvalues', cascade='all, delete-orphan'))
+    attribute = db.relationship(InventoryVariantAttribute, backref=db.backref('variant_values', cascade='all, delete-orphan'))
 
     variant_id = db.Column(None, db.ForeignKey('inventory_item_variant.id'), nullable=False)
-    variant = db.relationship(InventoryItemVariant, backref=db.backref('attributes', cascade='all, delete-orphan'))
+    variant = db.relationship(InventoryItemVariant,
+       backref=db.backref('variant_attributes', cascade='all, delete-orphan'))
 
     value = db.Column(db.Unicode(250), nullable=False)
 
