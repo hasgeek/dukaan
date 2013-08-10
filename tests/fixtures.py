@@ -40,29 +40,20 @@ def make_fixtures():
     for size in size_chart:
         db.session.add(
             InventoryItemVariant(inventory_item=metarefresh_tshirt, price=400, stock=10,
-                variant_attributes=[
-                    InventoryItemVariantAttribute(attribute=tshirt_color, value=u"Black"),
-                    InventoryItemVariantAttribute(attribute=tshirt_size, value=size)
-                ]))
+                vattrs={tshirt_color: u"Black", tshirt_size: size}))
 
     # Two colours, multiple sizes
     for color in [u"Black", u"Blue"]:
         for size in size_chart:
             db.session.add(
                 InventoryItemVariant(inventory_item=fifthel_tshirt1, price=400, stock=10,
-                    variant_attributes=[
-                        InventoryItemVariantAttribute(attribute=tshirt_color, value=color),
-                        InventoryItemVariantAttribute(attribute=tshirt_size, value=size)
-                    ]))
+                    vattrs={tshirt_color: color, tshirt_size: size}))
 
     # Multiple colours, multiple sizes, variable prices
     for color, price in [(u"Black", 400), (u"Blue", 400), (u"Green", 400), (u"Red", 400), (u"White", 350)]:
         for size in size_chart:
             db.session.add(
                 InventoryItemVariant(inventory_item=fifthel_tshirt2, price=price, stock=10,
-                    variant_attributes=[
-                        InventoryItemVariantAttribute(attribute=tshirt_color, value=color),
-                        InventoryItemVariantAttribute(attribute=tshirt_size, value=size)
-                    ]))
+                    vattrs={tshirt_color: color, tshirt_size: size}))
 
     db.session.commit()

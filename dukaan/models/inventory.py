@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm.collections import attribute_mapped_collection
+
 from . import db, BaseMixin, BaseNameMixin, BaseScopedNameMixin
 
 __all__ = ['InventoryType', 'InventoryVariantAttribute', 'InventoryItem',
@@ -49,6 +52,9 @@ class InventoryItemVariant(BaseMixin, db.Model):
     inventory_item = db.relationship(InventoryItem, backref=db.backref('variants', cascade='all, delete-orphan'))
     parent = db.synonym('inventory_item')
 
+    vattrs = association_proxy('variant_attributes', 'value',
+        creator=lambda k, v: InventoryItemVariantAttribute(attribute=k, value=v))
+
     price = db.Column(db.Numeric, nullable=False)  # Price (in the default currency)
     stock = db.Column(db.Integer, nullable=False)  # Availability
 
@@ -64,7 +70,8 @@ class InventoryItemVariantAttribute(BaseMixin, db.Model):
 
     variant_id = db.Column(None, db.ForeignKey('inventory_item_variant.id'), nullable=False)
     variant = db.relationship(InventoryItemVariant,
-       backref=db.backref('variant_attributes', cascade='all, delete-orphan'))
+       backref=db.backref('variant_attributes', cascade='all, delete-orphan',
+           collection_class=attribute_mapped_collection('attribute')))
 
     value = db.Column(db.Unicode(250), nullable=False)
 
