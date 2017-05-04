@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import sys
-from dukaan import app, init_for
-init_for('dev')
+from dukaan import app
 
 try:
     port = int(sys.argv[1])
