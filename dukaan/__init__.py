@@ -7,6 +7,7 @@ from flask import Flask
 from flask_lastuser import Lastuser
 from flask_lastuser.sqlalchemy import UserManager
 from baseframe import baseframe, assets, Version
+from flask_migrate import Migrate
 import coaster.app
 from ._version import __version__
 
@@ -32,6 +33,7 @@ assets['dukaan.css'][version] = 'css/app.css'
 coaster.app.init_app(app)
 db.init_app(app)
 db.app = app
+migrate = Migrate(app, db)
 baseframe.init_app(app, requires=['baseframe-bs3', 'dukaan'])
 lastuser.init_app(app)
 lastuser.init_usermanager(UserManager(db, models.User))
