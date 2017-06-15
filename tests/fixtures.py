@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from coaster import buid
+from coaster.utils import buid
 from dukaan.models import *
 
 
