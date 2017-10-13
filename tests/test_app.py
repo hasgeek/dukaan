@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from dukaan import app, db, init_for
+from dukaan import app, db
 from .fixtures import make_fixtures
 
 
 class DukaanTestCase(unittest.TestCase):
+    app = app
+
     def setUp(self):
-        init_for('testing')
-        app.config['TESTING'] = True
+        self.ctx = self.app.test_request_context()
+        self.ctx.push()
         db.create_all()
         self.app = app.test_client()
         self.db = db
